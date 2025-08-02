@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  discord-bot:
+    build: .
+    container_name: discord-bot
+    restart: unless-stopped
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - MONGODB_URL=mongodb://mongodb:27017
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+      - OWNER_IDS=${OWNER_IDS}
+      - DEFAULT_PREFIX=${DEFAULT_PREFIX:-!}
+      - BOT_STATUS=${BOT_STATUS:-online}
+      - ACTIVITY_TYPE=${ACTIVITY_TYPE:-watching}
+      - ACTIVITY_NAME=${ACTIVITY_NAME:-over the server | !help}
+      - LAVALINK_HOST=${LAVALINK_HOST:-lavalink}
+      - LAVALINK_PORT=${LAVALINK_PORT:-2333}
+      - LAVALINK_PASSWORD=${LAVALINK_PASSWORD:-youshallnotpass}
+      - DB_NAME=${DB_NAME:-discord_bot}
+    depends_on:
+      - mongodb
+      - lavalink
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - bot-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mongodb:
+    image: mongo:6.0
+    container_name: discord-bot-mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_DATABASE=discord_bot
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    ports:
+      - "27017:27017"
+    networks:
+      - bot-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  lavalink:
+    image: ghcr.io/lavalink-devs/lavalink:4
+    container_name: discord-bot-lavalink
+    restart: unless-stopped
+    environment:
+      - _JAVA_OPTIONS=-Xmx1G
+      - SERVER_PORT=2333
+      - LAVALINK_SERVER_PASSWORD=youshallnotpass
+    volumes:
+      - ./lavalink/application.yml:/opt/Lavalink/application.yml
+      - ./lavalink/plugins:/opt/Lavalink/plugins
+    ports:
+      - "2333:2333"
+    networks:
+      - bot-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:2333/version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    container_name: discord-bot-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - bot-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mongodb_data:
+  redis_data:
+
+networks:
+  bot-network:
+    driver: bridge

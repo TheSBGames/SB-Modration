@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: sbmoderation-discord-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run.py
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: MONGODB_URL
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: SPOTIFY_CLIENT_ID
+        sync: false
+      - key: SPOTIFY_CLIENT_SECRET
+        sync: false
+      - key: WEATHER_API_KEY
+        sync: false
+      - key: OWNER_IDS
+        value: "1186506712040099850"
+      - key: DEFAULT_PREFIX
+        value: "!"
+      - key: BOT_STATUS
+        value: "online"
+      - key: ACTIVITY_TYPE
+        value: "watching"
+      - key: ACTIVITY_NAME
+        value: "over the server | !help"
+      - key: DB_NAME
+        value: "discord_bot"
+      - key: LAVALINK_HOST
+        value: "lavalink.oops.wtf"
+      - key: LAVALINK_PORT
+        value: "443"
+      - key: LAVALINK_PASSWORD
+        value: "www.freelavalink.ga"
+      - key: LAVALINK_SECURE
+        value: "true"

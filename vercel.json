@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "run.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "run.py"
+    }
+  ],
+  "env": {
+    "DISCORD_TOKEN": "@discord_token",
+    "MONGODB_URL": "@mongodb_url",
+    "OPENAI_API_KEY": "@openai_api_key",
+    "SPOTIFY_CLIENT_ID": "@spotify_client_id",
+    "SPOTIFY_CLIENT_SECRET": "@spotify_client_secret",
+    "WEATHER_API_KEY": "@weather_api_key",
+    "OWNER_IDS": "1186506712040099850",
+    "DEFAULT_PREFIX": "!",
+    "BOT_STATUS": "online",
+    "ACTIVITY_TYPE": "watching",
+    "ACTIVITY_NAME": "over the server | !help",
+    "DB_NAME": "discord_bot"
+  }
+}

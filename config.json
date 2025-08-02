@@ -1,0 +1,15 @@
+{
+  "discord_token": "YOUR_DISCORD_BOT_TOKEN_HERE",
+  "mongodb_url": "mongodb://localhost:27017",
+  "openai_api_key": "YOUR_OPENAI_API_KEY_HERE",
+  "spotify_client_id": "YOUR_SPOTIFY_CLIENT_ID_HERE",
+  "spotify_client_secret": "YOUR_SPOTIFY_CLIENT_SECRET_HERE",
+  "weather_api_key": "YOUR_WEATHER_API_KEY_HERE",
+  "owner_ids": [123456789012345678],
+  "default_prefix": "!",
+  "bot_settings": {
+    "status": "online",
+    "activity_type": "watching",
+    "activity_name": "over the server | !help"
+  }
+}
