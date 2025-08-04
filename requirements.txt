@@ -22,3 +22,4 @@ better-profanity==0.7.0
 langdetect==1.0.9
 psutil==5.9.6
 humanize==4.9.0
+flask==2.3.3
